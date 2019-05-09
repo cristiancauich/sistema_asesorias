@@ -10,16 +10,21 @@ class CreateDocente {
     this.repository = repository;
   }
 
-  process(data) {
+  process(command) {
+    const { abstract } = command;
     const entity = new Docente;
-    const abstract = new User;
+    const user = new User;
 
+    entity.addAuditData(command.createdAt, command.createdBy);
+
+    user.addName(abstract.nombre, abstract.paterno, abstract.materno);
+    user.addBasics(abstract.email, abstract.birthday, abstract.telefono, abstract.sexo);
+    user.addAuditData(abstract.createdAt, abstract.createdBy);
+    user.setPassword(abstract.password);
+
+    user.addRole('Docente');
+    entity.abstract = user;
     
-    entity.idUsuario = data.idUsuario;
-    entity.addType(data.tipoDocente);
-    entity.addLifespan(data.fecha, data.timeInit, data.timeFin);
-    entity.addAuditData(data.createdAt, data.createdBy);
-
     return this.repository.create(entity);
   }
 }

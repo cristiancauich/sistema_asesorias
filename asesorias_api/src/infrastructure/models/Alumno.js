@@ -9,9 +9,15 @@ const Alumno = new EntitySchema({
   target: AlumnoModel,
   columns: {
     id: {
-      type: 'integer',
+      type: Number,
       primary: true,
       generated: true,
+    },
+    idUsuario: {
+      type: Number,
+      nullable: false,
+      name: 'id_usuario',
+      unsigned: true,
     },
     matricula: {
       type: String,
@@ -29,10 +35,13 @@ const Alumno = new EntitySchema({
     },
   },
   relations: {
-    user: {
+    abstract: {
       type: 'one-to-one',
       target: 'User',
-      joinColumn: true
+      cascade: true,
+      joinColumn: {
+        name: 'id_usuario'
+      }
     }
   }
 });
